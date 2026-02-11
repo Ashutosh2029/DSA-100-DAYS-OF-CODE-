@@ -1,0 +1,75 @@
+#include <stdio.h>
+
+int main() {
+    int rows, cols;
+
+    // Input number of rows and columns
+    printf("Enter number of rows: ");
+    scanf("%d", &rows);
+
+    printf("Enter number of columns: ");
+    scanf("%d", &cols);
+
+    // Check for valid size
+    if(rows <= 0 || cols <= 0) {
+        printf("Invalid matrix size!\n");
+        return 0;
+    }
+
+    // Declare matrices
+    int A[rows][cols], B[rows][cols], Sum[rows][cols];
+
+    // Input Matrix A
+    printf("\nEnter elements of Matrix A:\n");
+    for(int i = 0; i < rows; i++) {
+        for(int j = 0; j < cols; j++) {
+            printf("A[%d][%d] = ", i, j);
+            scanf("%d", &A[i][j]);
+        }
+    }
+
+    // Input Matrix B
+    printf("\nEnter elements of Matrix B:\n");
+    for(int i = 0; i < rows; i++) {
+        for(int j = 0; j < cols; j++) {
+            printf("B[%d][%d] = ", i, j);
+            scanf("%d", &B[i][j]);
+        }
+    }
+
+    // Perform Matrix Addition
+    for(int i = 0; i < rows; i++) {
+        for(int j = 0; j < cols; j++) {
+            Sum[i][j] = A[i][j] + B[i][j];
+        }
+    }
+
+    // Display Matrix A
+    printf("\nMatrix A:\n");
+    for(int i = 0; i < rows; i++) {
+        for(int j = 0; j < cols; j++) {
+            printf("%d\t", A[i][j]);
+        }
+        printf("\n");
+    }
+
+    // Display Matrix B
+    printf("\nMatrix B:\n");
+    for(int i = 0; i < rows; i++) {
+        for(int j = 0; j < cols; j++) {
+            printf("%d\t", B[i][j]);
+        }
+        printf("\n");
+    }
+
+    // Display Sum Matrix
+    printf("\nSum of Matrix A and B:\n");
+    for(int i = 0; i < rows; i++) {
+        for(int j = 0; j < cols; j++) {
+            printf("%d\t", Sum[i][j]);
+        }
+        printf("\n");
+    }
+
+    return 0;
+}
