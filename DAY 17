@@ -1,0 +1,53 @@
+#include <stdio.h>
+
+// Function to reverse part of the array
+void reverse(int* nums, int start, int end) {
+    while (start < end) {
+        int temp = nums[start];
+        nums[start] = nums[end];
+        nums[end] = temp;
+        start++;
+        end--;
+    }
+}
+
+// Function to rotate array to the right by k steps
+void rotate(int* nums, int numsSize, int k) {
+    if (numsSize == 0) return;
+
+    k = k % numsSize;  // Handle k > n
+
+    // Step 1: Reverse entire array
+    reverse(nums, 0, numsSize - 1);
+
+    // Step 2: Reverse first k elements
+    reverse(nums, 0, k - 1);
+
+    // Step 3: Reverse remaining elements
+    reverse(nums, k, numsSize - 1);
+}
+
+// Utility function to print array
+void printArray(int* nums, int size) {
+    for (int i = 0; i < size; i++) {
+        printf("%d ", nums[i]);
+    }
+    printf("\n");
+}
+
+// Main function (for local testing / GitHub)
+int main() {
+    int nums[] = {1, 2, 3, 4, 5, 6, 7};
+    int n = sizeof(nums) / sizeof(nums[0]);
+    int k = 3;
+
+    printf("Original array:\n");
+    printArray(nums, n);
+
+    rotate(nums, n, k);
+
+    printf("Rotated array:\n");
+    printArray(nums, n);
+
+    return 0;
+}
