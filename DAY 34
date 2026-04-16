@@ -1,0 +1,82 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+// Node structure for stack
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+struct Node* top = NULL;
+
+// Push operation
+void push(int val) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = val;
+    newNode->next = top;
+    top = newNode;
+}
+
+// Pop operation
+int pop() {
+    if (top == NULL) {
+        printf("Stack Underflow\n");
+        return 0;
+    }
+    int val = top->data;
+    struct Node* temp = top;
+    top = top->next;
+    free(temp);
+    return val;
+}
+
+// Evaluate postfix expression
+int evaluatePostfix(char* expr) {
+    char* token = strtok(expr, " ");
+
+    while (token != NULL) {
+        // If operand
+        if (isdigit(token[0]) || (token[0] == '-' && isdigit(token[1]))) {
+            push(atoi(token));
+        } 
+        else {
+            int b = pop();
+            int a = pop();
+
+            int result;
+
+            switch (token[0]) {
+                case '+': result = a + b; break;
+                case '-': result = a - b; break;
+                case '*': result = a * b; break;
+                case '/': result = a / b; break;
+                default: return 0;
+            }
+
+            push(result);
+        }
+
+        token = strtok(NULL, " ");
+    }
+
+    return pop();
+}
+
+// Main function
+int main() {
+    char expr[100];
+
+    // Read full line input
+    fgets(expr, sizeof(expr), stdin);
+
+    // Remove newline
+    expr[strcspn(expr, "\n")] = '\0';
+
+    int result = evaluatePostfix(expr);
+
+    printf("%d\n", result);
+
+    return 0;
+}
