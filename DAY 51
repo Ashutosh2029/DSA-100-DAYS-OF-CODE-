@@ -1,0 +1,73 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+// Definition of Tree Node
+struct TreeNode {
+    int val;
+    TreeNode* left;
+    TreeNode* right;
+
+    TreeNode(int x) {
+        val = x;
+        left = NULL;
+        right = NULL;
+    }
+};
+
+// Function to insert node in BST
+TreeNode* insert(TreeNode* root, int val) {
+    if (root == NULL) {
+        return new TreeNode(val);
+    }
+
+    if (val < root->val) {
+        root->left = insert(root->left, val);
+    } else {
+        root->right = insert(root->right, val);
+    }
+
+    return root;
+}
+
+// Function to find LCA in BST
+TreeNode* findLCA(TreeNode* root, int p, int q) {
+    if (root == NULL) return NULL;
+
+    if (p < root->val && q < root->val) {
+        return findLCA(root->left, p, q);
+    }
+
+    if (p > root->val && q > root->val) {
+        return findLCA(root->right, p, q);
+    }
+
+    return root; // This is LCA
+}
+
+int main() {
+    int n;
+    cin >> n;
+
+    vector<int> arr(n);
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+
+    int p, q;
+    cin >> p >> q;
+
+    // Build BST
+    TreeNode* root = NULL;
+    for (int i = 0; i < n; i++) {
+        root = insert(root, arr[i]);
+    }
+
+    // Find LCA
+    TreeNode* lca = findLCA(root, p, q);
+
+    if (lca != NULL)
+        cout << lca->val;
+
+    return 0;
+}
