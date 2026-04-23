@@ -1,0 +1,19 @@
+class Solution {
+public:
+    vector<vector<int>> buildGraph(int n, vector<vector<int>>& edges) {
+        vector<vector<int>> adj(n);
+
+        for (auto &e : edges) {
+            int u = e[0];
+            int v = e[1];
+
+            // Directed graph
+            adj[u].push_back(v);
+
+            // Uncomment for undirected graph
+            // adj[v].push_back(u);
+        }
+
+        return adj;
+    }
+};
