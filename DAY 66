@@ -1,0 +1,60 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+bool dfs(int node, vector<vector<int>> &adj, vector<bool> &visited, vector<bool> &recStack) {
+    visited[node] = true;
+    recStack[node] = true;
+
+    for (int neighbor : adj[node]) {
+        if (!visited[neighbor]) {
+            if (dfs(neighbor, adj, visited, recStack))
+                return true;
+        }
+        else if (recStack[neighbor]) {
+            // Back edge → cycle found
+            return true;
+        }
+    }
+
+    recStack[node] = false; // remove from recursion stack
+    return false;
+}
+
+bool hasCycle(int n, vector<vector<int>> &adj) {
+    vector<bool> visited(n, false);
+    vector<bool> recStack(n, false);
+
+    for (int i = 0; i < n; i++) {
+        if (!visited[i]) {
+            if (dfs(i, adj, visited, recStack))
+                return true;
+        }
+    }
+    return false;
+}
+
+int main() {
+    int n;
+    cin >> n;  // number of vertices
+
+    vector<vector<int>> adj(n);
+
+    // Input adjacency list
+    for (int i = 0; i < n; i++) {
+        int m; // number of outgoing edges
+        cin >> m;
+        for (int j = 0; j < m; j++) {
+            int x;
+            cin >> x;
+            adj[i].push_back(x);
+        }
+    }
+
+    if (hasCycle(n, adj))
+        cout << "YES";
+    else
+        cout << "NO";
+
+    return 0;
+}
