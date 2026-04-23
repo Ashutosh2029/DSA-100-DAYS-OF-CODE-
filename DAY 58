@@ -1,0 +1,70 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+// Tree Node
+struct Node {
+    int data;
+    Node* left;
+    Node* right;
+
+    Node(int val) {
+        data = val;
+        left = right = NULL;
+    }
+};
+
+// Build tree function
+Node* buildTree(vector<int>& preorder, vector<int>& inorder, 
+                int inStart, int inEnd, int& preIndex, 
+                unordered_map<int, int>& mp) {
+
+    if (inStart > inEnd) return NULL;
+
+    // Pick current root from preorder
+    int rootVal = preorder[preIndex++];
+    Node* root = new Node(rootVal);
+
+    // Find index in inorder
+    int inIndex = mp[rootVal];
+
+    // Build left subtree
+    root->left = buildTree(preorder, inorder, inStart, inIndex - 1, preIndex, mp);
+
+    // Build right subtree
+    root->right = buildTree(preorder, inorder, inIndex + 1, inEnd, preIndex, mp);
+
+    return root;
+}
+
+// Postorder traversal
+void postorder(Node* root) {
+    if (!root) return;
+
+    postorder(root->left);
+    postorder(root->right);
+    cout << root->data << " ";
+}
+
+int main() {
+    int n;
+    cin >> n;
+
+    vector<int> preorder(n), inorder(n);
+
+    for (int i = 0; i < n; i++) cin >> preorder[i];
+    for (int i = 0; i < n; i++) cin >> inorder[i];
+
+    // Map for fast lookup in inorder
+    unordered_map<int, int> mp;
+    for (int i = 0; i < n; i++) {
+        mp[inorder[i]] = i;
+    }
+
+    int preIndex = 0;
+
+    Node* root = buildTree(preorder, inorder, 0, n - 1, preIndex, mp);
+
+    postorder(root);
+
+    return 0;
+}
