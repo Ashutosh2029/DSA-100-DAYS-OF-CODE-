@@ -1,0 +1,98 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+// Tree Node
+struct Node {
+    int data;
+    Node* left;
+    Node* right;
+
+    Node(int val) {
+        data = val;
+        left = right = NULL;
+    }
+};
+
+// Build tree from level order
+Node* buildTree(vector<int>& arr) {
+    if (arr.size() == 0) return NULL;
+
+    Node* root = new Node(arr[0]);
+    queue<Node*> q;
+    q.push(root);
+
+    int i = 1;
+    while (!q.empty() && i < arr.size()) {
+        Node* curr = q.front();
+        q.pop();
+
+        // Left child
+        if (i < arr.size()) {
+            curr->left = new Node(arr[i]);
+            q.push(curr->left);
+            i++;
+        }
+
+        // Right child
+        if (i < arr.size()) {
+            curr->right = new Node(arr[i]);
+            q.push(curr->right);
+            i++;
+        }
+    }
+    return root;
+}
+
+// Count nodes
+int countNodes(Node* root) {
+    if (!root) return 0;
+    return 1 + countNodes(root->left) + countNodes(root->right);
+}
+
+// Check Complete Binary Tree
+bool isCBT(Node* root, int index, int totalNodes) {
+    if (!root) return true;
+
+    if (index >= totalNodes) return false;
+
+    return isCBT(root->left, 2 * index + 1, totalNodes) &&
+           isCBT(root->right, 2 * index + 2, totalNodes);
+}
+
+// Check Min-Heap property
+bool isMinHeap(Node* root) {
+    // Leaf node
+    if (!root->left && !root->right)
+        return true;
+
+    // Only left child
+    if (root->right == NULL) {
+        return (root->data <= root->left->data) &&
+               isMinHeap(root->left);
+    }
+
+    // Both children
+    return (root->data <= root->left->data &&
+            root->data <= root->right->data) &&
+           isMinHeap(root->left) &&
+           isMinHeap(root->right);
+}
+
+int main() {
+    int n;
+    cin >> n;
+
+    vector<int> arr(n);
+    for (int i = 0; i < n; i++) cin >> arr[i];
+
+    Node* root = buildTree(arr);
+
+    int totalNodes = countNodes(root);
+
+    if (isCBT(root, 0, totalNodes) && isMinHeap(root))
+        cout << "YES";
+    else
+        cout << "NO";
+
+    return 0;
+}
