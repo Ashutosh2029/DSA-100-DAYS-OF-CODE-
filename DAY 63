@@ -1,0 +1,46 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+void dfs(int node, vector<vector<int>> &adj, vector<bool> &visited) {
+    // Mark current node as visited
+    visited[node] = true;
+    
+    // Print the node
+    cout << node << " ";
+    
+    // Visit all adjacent nodes
+    for (int neighbor : adj[node]) {
+        if (!visited[neighbor]) {
+            dfs(neighbor, adj, visited);
+        }
+    }
+}
+
+int main() {
+    int n;
+    cin >> n;  // number of vertices
+
+    vector<vector<int>> adj(n);
+
+    // Input adjacency list
+    for (int i = 0; i < n; i++) {
+        int m; // number of neighbors
+        cin >> m;
+        for (int j = 0; j < m; j++) {
+            int x;
+            cin >> x;
+            adj[i].push_back(x);
+        }
+    }
+
+    int s;
+    cin >> s; // starting vertex
+
+    vector<bool> visited(n, false);
+
+    // Perform DFS
+    dfs(s, adj, visited);
+
+    return 0;
+}
