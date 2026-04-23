@@ -1,0 +1,57 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+bool dfs(int node, int parent, vector<vector<int>> &adj, vector<bool> &visited) {
+    visited[node] = true;
+
+    for (int neighbor : adj[node]) {
+        if (!visited[neighbor]) {
+            if (dfs(neighbor, node, adj, visited))
+                return true;
+        }
+        else if (neighbor != parent) {
+            // Visited node that is not parent → cycle found
+            return true;
+        }
+    }
+    return false;
+}
+
+bool hasCycle(int n, vector<vector<int>> &adj) {
+    vector<bool> visited(n, false);
+
+    // Handle disconnected graph
+    for (int i = 0; i < n; i++) {
+        if (!visited[i]) {
+            if (dfs(i, -1, adj, visited))
+                return true;
+        }
+    }
+    return false;
+}
+
+int main() {
+    int n;
+    cin >> n;  // number of vertices
+
+    vector<vector<int>> adj(n);
+
+    // Input adjacency list
+    for (int i = 0; i < n; i++) {
+        int m; // number of neighbors
+        cin >> m;
+        for (int j = 0; j < m; j++) {
+            int x;
+            cin >> x;
+            adj[i].push_back(x);
+        }
+    }
+
+    if (hasCycle(n, adj))
+        cout << "YES";
+    else
+        cout << "NO";
+
+    return 0;
+}
