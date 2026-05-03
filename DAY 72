@@ -1,0 +1,27 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    string s;
+    cin >> s;
+
+    vector<int> freq(26, 0);
+
+    for (int i = 0; i < s.length(); i++) {
+        int idx = s[i] - 'a';
+
+        freq[idx]++;
+
+        // if character appears second time → return immediately
+        if (freq[idx] == 2) {
+            cout << s[i] << endl;
+            return 0;
+        }
+    }
+
+    // if no repeated character
+    cout << -1 << endl;
+
+    return 0;
+}
