@@ -1,0 +1,69 @@
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+class HashTable {
+    int m; // table size
+    vector<int> table;
+
+public:
+    HashTable(int size) {
+        m = size;
+        table.assign(m, -1); // -1 means empty
+    }
+
+    int hashFunc(int key) {
+        return key % m;
+    }
+
+    void insert(int key) {
+        for (int i = 0; i < m; i++) {
+            int idx = (hashFunc(key) + i * i) % m;
+
+            if (table[idx] == -1) {
+                table[idx] = key;
+                return;
+            }
+        }
+        // Table full
+    }
+
+    bool search(int key) {
+        for (int i = 0; i < m; i++) {
+            int idx = (hashFunc(key) + i * i) % m;
+
+            if (table[idx] == -1) {
+                return false;
+            }
+            if (table[idx] == key) {
+                return true;
+            }
+        }
+        return false;
+    }
+};
+
+int main() {
+    int m, q;
+    cin >> m >> q;
+
+    HashTable ht(m);
+
+    while (q--) {
+        string op;
+        int key;
+        cin >> op >> key;
+
+        if (op == "INSERT") {
+            ht.insert(key);
+        } else if (op == "SEARCH") {
+            if (ht.search(key))
+                cout << "FOUND\n";
+            else
+                cout << "NOT FOUND\n";
+        }
+    }
+
+    return 0;
+}
