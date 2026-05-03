@@ -1,0 +1,62 @@
+#include <iostream>
+#include <vector>
+#include <climits>
+using namespace std;
+
+struct Edge {
+    int u, v, w;
+};
+
+void bellmanFord(int n, int m, vector<Edge>& edges, int source) {
+    vector<int> dist(n, INT_MAX);
+
+    dist[source] = 0;
+
+    // Step 1: Relax all edges (n-1) times
+    for (int i = 0; i < n - 1; i++) {
+        for (auto& e : edges) {
+            if (dist[e.u] != INT_MAX && dist[e.u] + e.w < dist[e.v]) {
+                dist[e.v] = dist[e.u] + e.w;
+            }
+        }
+    }
+
+    // Step 2: Check for negative weight cycle
+    for (auto& e : edges) {
+        if (dist[e.u] != INT_MAX && dist[e.u] + e.w < dist[e.v]) {
+            cout << "NEGATIVE CYCLE DETECTED\n";
+            return;
+        }
+    }
+
+    // Step 3: Print shortest distances
+    cout << "Vertex\tDistance from Source\n";
+    for (int i = 0; i < n; i++) {
+        if (dist[i] == INT_MAX)
+            cout << i << "\tINF\n";
+        else
+            cout << i << "\t" << dist[i] << "\n";
+    }
+}
+
+int main() {
+    int n = 5;  // number of vertices
+    int m = 8;  // number of edges
+
+    vector<Edge> edges = {
+        {0, 1, -1},
+        {0, 2, 4},
+        {1, 2, 3},
+        {1, 3, 2},
+        {1, 4, 2},
+        {3, 2, 5},
+        {3, 1, 1},
+        {4, 3, -3}
+    };
+
+    int source = 0;
+
+    bellmanFord(n, m, edges, source);
+
+    return 0;
+}
