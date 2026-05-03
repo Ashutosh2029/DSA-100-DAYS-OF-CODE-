@@ -1,0 +1,77 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Function to perform Topological Sort using Kahn's Algorithm
+void topologicalSort(int V, int** adj, int* adjSize) {
+    int* indegree = (int*)calloc(V, sizeof(int));
+
+    // Step 1: Calculate indegree of each node
+    for (int i = 0; i < V; i++) {
+        for (int j = 0; j < adjSize[i]; j++) {
+            indegree[adj[i][j]]++;
+        }
+    }
+
+    // Step 2: Create queue
+    int* queue = (int*)malloc(V * sizeof(int));
+    int front = 0, rear = 0;
+
+    // Step 3: Push all nodes with indegree 0
+    for (int i = 0; i < V; i++) {
+        if (indegree[i] == 0) {
+            queue[rear++] = i;
+        }
+    }
+
+    int count = 0;
+
+    printf("Topological Order: ");
+
+    // Step 4: Process queue
+    while (front < rear) {
+        int node = queue[front++];
+        printf("%d ", node);
+        count++;
+
+        for (int i = 0; i < adjSize[node]; i++) {
+            int neighbor = adj[node][i];
+            indegree[neighbor]--;
+
+            if (indegree[neighbor] == 0) {
+                queue[rear++] = neighbor;
+            }
+        }
+    }
+
+    // Step 5: Check for cycle
+    if (count != V) {
+        printf("\nCycle detected! Topological sort not possible.\n");
+    }
+
+    free(indegree);
+    free(queue);
+}
+
+int main() {
+    int V = 6;
+
+    // Allocate adjacency list
+    int** adj = (int**)malloc(V * sizeof(int*));
+    int* adjSize = (int*)calloc(V, sizeof(int));
+
+    for (int i = 0; i < V; i++) {
+        adj[i] = (int*)malloc(V * sizeof(int));
+    }
+
+    // Add edges (u -> v)
+    adj[5][adjSize[5]++] = 2;
+    adj[5][adjSize[5]++] = 0;
+    adj[4][adjSize[4]++] = 0;
+    adj[4][adjSize[4]++] = 1;
+    adj[2][adjSize[2]++] = 3;
+    adj[3][adjSize[3]++] = 1;
+
+    topologicalSort(V, adj, adjSize);
+
+    return 0;
+}
